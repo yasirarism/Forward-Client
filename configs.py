@@ -4,6 +4,8 @@ import os
 import heroku3
 
 
+
+
 class Config(object):
     # Get This From @TeleORG_Bot
     API_ID = int(os.environ.get("API_ID"))
@@ -11,13 +13,24 @@ class Config(object):
     # Get This From @StringSessionGen_Bot
     STRING_SESSION = os.environ.get("STRING_SESSION")
     # Forward From Chat ID
-    FORWARD_FROM_CHAT_ID = list(set(int(x) for x in os.environ.get("FORWARD_FROM_CHAT_ID", "-100").split()))
+    FORWARD_FROM_CHAT_ID = list(
+        {
+            int(x)
+            for x in os.environ.get("FORWARD_FROM_CHAT_ID", "-100").split()
+        }
+    )
     # Forward To Chat ID
-    FORWARD_TO_CHAT_ID = list(set(int(x) for x in os.environ.get("FORWARD_TO_CHAT_ID", "-100").split()))
+    FORWARD_TO_CHAT_ID = list(
+        {int(x) for x in os.environ.get("FORWARD_TO_CHAT_ID", "-100").split()}
+    )
     # Filters for Forwards
     DEFAULT_FILTERS = "video document photo audio text gif forwarded poll sticker"
-    FORWARD_FILTERS = list(set(x for x in os.environ.get("FORWARD_FILTERS", DEFAULT_FILTERS).split()))
-    BLOCKED_EXTENSIONS = list(set(x for x in os.environ.get("BLOCKED_EXTENSIONS", "").split()))
+    FORWARD_FILTERS = list(
+        set(os.environ.get("FORWARD_FILTERS", DEFAULT_FILTERS).split())
+    )
+    BLOCKED_EXTENSIONS = list(
+        set(os.environ.get("BLOCKED_EXTENSIONS", "").split())
+    )
     MINIMUM_FILE_SIZE = os.environ.get("MINIMUM_FILE_SIZE", None)
     BLOCK_FILES_WITHOUT_EXTENSIONS = bool(os.environ.get("BLOCK_FILES_WITHOUT_EXTENSIONS", False))
     # Forward as Copy. Value Should be True or False
